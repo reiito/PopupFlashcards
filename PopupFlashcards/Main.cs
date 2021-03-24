@@ -1,7 +1,6 @@
 ﻿using CsvHelper;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -12,7 +11,8 @@ namespace PopupFlashcards
 {
 	public partial class FlashWindow : Form
 	{
-		enum Mode { Japanese, English, Verb, Noun }
+		SettingsWindow settingsWindow;
+		Settings settings;
 
 		List<Card> cards = new List<Card>();
 
@@ -31,26 +31,38 @@ namespace PopupFlashcards
 
 		SymSpell symSpell;
 
+		// Files
+		static readonly string resourcesFolderPath = AppContext.BaseDirectory + "resources\\";
+		public static readonly string settingsLocation = resourcesFolderPath + "settings.csv";
+		static readonly string cardsLocation = resourcesFolderPath + "cards.csv";
+		static readonly string dictionaryLocation = resourcesFolderPath + "frequency_dictionary_en_82_765.txt";
+		static readonly string popupSoundLocation = resourcesFolderPath + "notification.wav";
+		static readonly string correctSoundLocation = resourcesFolderPath + "correct.wav";
+		static readonly string incorrectSoundLocation = resourcesFolderPath + "incorrect.wav";
+
 		public FlashWindow()
 		{
 			InitializeComponent();
 
+			if (!Directory.Exists(resourcesFolderPath))
+				Directory.CreateDirectory(resourcesFolderPath);
+
 			cards = LoadCardFile();
 
-			player.SoundLocation = AppContext.BaseDirectory + "notification.wav";
+			player.SoundLocation = popupSoundLocation;
+
+			// settings
+			settings = new Settings();
+			settings.Load(settingsLocation);
+			settingsWindow = new SettingsWindow(this, settings, cards);
+			settingsWindow.Hide();
 
 			// spell check setup
-			long memSize = GC.GetTotalMemory(true);
-			Stopwatch stopWatch = new Stopwatch();
-			stopWatch.Start();
 			const int initialCapacity = 82765;
 			const int maxEditDistance = 2;
 			const int prefixLength = 7;
 			symSpell = new SymSpell(initialCapacity, maxEditDistance, prefixLength);
-			string path = "../../frequency_dictionary_en_82_765.txt";
-			if (!symSpell.LoadDictionary(path, 0, 1)) { Console.Error.WriteLine("\rFile not found: " + Path.GetFullPath(path)); Console.ReadKey(); return; }
-			stopWatch.Stop();
-			long memDelta = GC.GetTotalMemory(true) - memSize;
+			if (!symSpell.LoadDictionary(dictionaryLocation, 0, 1)) { Console.Error.WriteLine("\rFile not found: " + Path.GetFullPath(dictionaryLocation)); Console.ReadKey(); return; }
 		}
 
 		private void Main_Load(object sender, EventArgs e)
@@ -110,7 +122,7 @@ namespace PopupFlashcards
 
 		void ShowFromSystemTray()
 		{
-			player.SoundLocation = AppContext.BaseDirectory + "notification.wav";
+			player.SoundLocation = popupSoundLocation;
 			player.Play();
 
 			PopupTimer.Stop();
@@ -127,7 +139,7 @@ namespace PopupFlashcards
 
 		static List<Card> LoadCardFile()
 		{
-			using (var reader = new StreamReader(AppContext.BaseDirectory + "cards.csv"))
+			using (var reader = new StreamReader(cardsLocation))
 			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
 			{
 				return csv.GetRecords<Card>().ToList();
@@ -142,31 +154,39 @@ namespace PopupFlashcards
 			bool decided = false;
 			while (!decided)
 			{
-				if ((cards[genRand].Type == "Noun" && !NounsCbx.Checked) || (cards[genRand].Type == "Verb" && !VerbsCbx.Checked))
+				if (settings.PracticeType.Equals("All"))
+				{
+					decided = true;
+				}
+				else if (!cards[genRand].Type.Equals(settings.PracticeType))
 				{
 					genRand = r.Next(0, cards.Count);
-					decided = false;
 					continue;
 				}
-				else
-					decided = true;
 
-				foreach (string q in previousQuestions)
+				if (previousQuestions.Count == 0)
 				{
-					if (q == cards[genRand].Hiragana)
+					decided = true;
+				}
+				else
+				{
+					foreach (string q in previousQuestions)
 					{
-						genRand = r.Next(0, cards.Count);
-						decided = false;
-						break;
-					}
-					else
-					{
-						if (previousQuestions.Count > prevQuestionLimit)
-							previousQuestions.RemoveAt(0);
+						if (q.Equals(cards[genRand].Hiragana))
+						{
+							genRand = r.Next(0, cards.Count);
+							decided = false;
+							break;
+						}
+						else
+						{
+							if (previousQuestions.Count > prevQuestionLimit)
+								previousQuestions.RemoveAt(0);
 
-						previousQuestions.Add(cards[genRand].Hiragana);
-						decided = true;
-						break;
+							previousQuestions.Add(cards[genRand].Hiragana);
+							decided = true;
+							break;
+						}
 					}
 				}
 			}
@@ -198,12 +218,12 @@ namespace PopupFlashcards
 				if (CorrectAnswerCheck())
 				{
 					AnswerStatusLbl.Text = "Correct!";
-					player.SoundLocation = AppContext.BaseDirectory + "correct.wav";
+					player.SoundLocation = correctSoundLocation;
 				}
 				else
 				{
 					AnswerStatusLbl.Text = "You'll get it next time!";
-					player.SoundLocation = AppContext.BaseDirectory + "incorrect.wav";
+					player.SoundLocation = incorrectSoundLocation;
 				}
 					
 
@@ -241,8 +261,6 @@ namespace PopupFlashcards
 		private bool CorrectAnswerCheck()
 		{
 			int correctCount = 0;
-
-			List<SymSpell.SuggestItem> suggestions = null;
 			const SymSpell.Verbosity verbosity = SymSpell.Verbosity.Closest;
 
 			string[] splitUserAnswer = AnswerTxb.Text.Split(' ');
@@ -260,7 +278,7 @@ namespace PopupFlashcards
 
 				for (int i = 0; i < splitUserAnswer.Length; i++)
 				{
-					suggestions = symSpell.Lookup(splitUserAnswer[i], verbosity);
+					List<SymSpell.SuggestItem> suggestions = symSpell.Lookup(splitUserAnswer[i], verbosity);
 					if (suggestions.Count != 0)
 					{
 						foreach (SymSpell.SuggestItem suggestion in suggestions)
@@ -282,22 +300,10 @@ namespace PopupFlashcards
 				return false;
 		}
 
-		private void NounsCbx_CheckedChanged(object sender, EventArgs e)
+		private void SettingsBtn_Click(object sender, EventArgs e)
 		{
-			if (!VerbsCbx.Checked)
-			{
-				NounsCbx.Checked = true;
-				AnswerStatusLbl.Text = "At least 1 of Nouns/Verbs need to be ticked";
-			}
-		}
-
-		private void VerbsCbx_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!NounsCbx.Checked)
-			{
-				VerbsCbx.Checked = true;
-				AnswerStatusLbl.Text = "At least 1 of Nouns/Verbs need to be ticked";
-			}
+			Enabled = false;
+			settingsWindow.Show();
 		}
 	}
 }

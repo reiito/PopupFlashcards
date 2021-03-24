@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PopupFlashcards
+﻿namespace PopupFlashcards
 {
-	class Card
+	public class Card
 	{
 		public string Kanji { get; set; }
 		public string Hiragana { get; set; }
