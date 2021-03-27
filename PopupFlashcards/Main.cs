@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace PopupFlashcards
@@ -103,8 +104,7 @@ namespace PopupFlashcards
 			AnswerTxb.Text = "";
 			AnswerStatusLbl.Text = "";
 			currentAnswers = new List<string>();
-			SubmitBtn.Enabled = true;
-			AnswerTxb.Enabled = true;
+			Enabled = true;
 			GetRandomCard();
 		}
 
@@ -228,9 +228,8 @@ namespace PopupFlashcards
 					
 
 				player.Play();
-				SubmitBtn.Enabled = false;
-				AnswerTxb.Enabled = false;
 				AnswerTxb.Text = cards[genRand].English;
+				Enabled = false;
 				ResultTimer.Start();
 				return;
 			}
@@ -269,6 +268,7 @@ namespace PopupFlashcards
 			{
 				splitCorrectAnswerList.Add(answer.Split(' '));
 			}
+
 			foreach (string[] splitCorrectAnswer in splitCorrectAnswerList)
 			{
 				if (splitCorrectAnswer.Length != splitUserAnswer.Length)
@@ -278,12 +278,17 @@ namespace PopupFlashcards
 
 				for (int i = 0; i < splitUserAnswer.Length; i++)
 				{
+					if (splitUserAnswer[i].Length == 1 && (char.IsSymbol(splitUserAnswer[i][0]) || char.IsPunctuation(splitUserAnswer[i][0])))
+					{
+						correctCount++;
+						continue;
+					}
+
 					List<SymSpell.SuggestItem> suggestions = symSpell.Lookup(splitUserAnswer[i], verbosity);
 					if (suggestions.Count != 0)
 					{
 						foreach (SymSpell.SuggestItem suggestion in suggestions)
 						{
-							Console.WriteLine(suggestion.term + " ?= " + splitCorrectAnswer[i]);
 							if (suggestion.term.Equals(splitCorrectAnswer[i]))
 							{
 								correctCount++;
