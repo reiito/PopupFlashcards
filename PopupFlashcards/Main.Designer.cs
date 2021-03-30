@@ -38,8 +38,8 @@ namespace PopupFlashcards
 			this.AnswerTxb = new System.Windows.Forms.TextBox();
 			this.AnswerStatusLbl = new System.Windows.Forms.Label();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.KanjiLbl = new System.Windows.Forms.Label();
-			this.QuestionLbl = new System.Windows.Forms.Label();
+			this.TopQLbl = new System.Windows.Forms.Label();
+			this.BottomQLbl = new System.Windows.Forms.Label();
 			this.SettingsBtn = new System.Windows.Forms.Button();
 			this.MinimizeNotifiy = new System.Windows.Forms.NotifyIcon(this.components);
 			this.PopupTimer = new System.Windows.Forms.Timer(this.components);
@@ -133,8 +133,8 @@ namespace PopupFlashcards
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.Controls.Add(this.KanjiLbl, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.QuestionLbl, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.TopQLbl, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.BottomQLbl, 0, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -144,30 +144,30 @@ namespace PopupFlashcards
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(394, 138);
 			this.tableLayoutPanel3.TabIndex = 4;
 			// 
-			// KanjiLbl
+			// TopQLbl
 			// 
-			this.KanjiLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.KanjiLbl.AutoSize = true;
-			this.KanjiLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
-			this.KanjiLbl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.KanjiLbl.Location = new System.Drawing.Point(3, 11);
-			this.KanjiLbl.Name = "KanjiLbl";
-			this.KanjiLbl.Size = new System.Drawing.Size(388, 46);
-			this.KanjiLbl.TabIndex = 2;
-			this.KanjiLbl.Text = "Incorrect";
-			this.KanjiLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.TopQLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.TopQLbl.AutoSize = true;
+			this.TopQLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+			this.TopQLbl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.TopQLbl.Location = new System.Drawing.Point(3, 11);
+			this.TopQLbl.Name = "TopQLbl";
+			this.TopQLbl.Size = new System.Drawing.Size(388, 46);
+			this.TopQLbl.TabIndex = 2;
+			this.TopQLbl.Text = "Incorrect";
+			this.TopQLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// QuestionLbl
+			// BottomQLbl
 			// 
-			this.QuestionLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.QuestionLbl.AutoSize = true;
-			this.QuestionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
-			this.QuestionLbl.Location = new System.Drawing.Point(3, 80);
-			this.QuestionLbl.Name = "QuestionLbl";
-			this.QuestionLbl.Size = new System.Drawing.Size(388, 46);
-			this.QuestionLbl.TabIndex = 1;
-			this.QuestionLbl.Text = "Incorrect";
-			this.QuestionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.BottomQLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.BottomQLbl.AutoSize = true;
+			this.BottomQLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F);
+			this.BottomQLbl.Location = new System.Drawing.Point(3, 80);
+			this.BottomQLbl.Name = "BottomQLbl";
+			this.BottomQLbl.Size = new System.Drawing.Size(388, 46);
+			this.BottomQLbl.TabIndex = 1;
+			this.BottomQLbl.Text = "Incorrect";
+			this.BottomQLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// SettingsBtn
 			// 
@@ -226,7 +226,7 @@ namespace PopupFlashcards
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.TextBox AnswerTxb;
-		private System.Windows.Forms.Label QuestionLbl;
+		private System.Windows.Forms.Label BottomQLbl;
 		private System.Windows.Forms.NotifyIcon MinimizeNotifiy;
 		public System.Windows.Forms.Timer PopupTimer;
 		private System.Windows.Forms.Button SubmitBtn;
@@ -234,7 +234,7 @@ namespace PopupFlashcards
 		private System.Windows.Forms.Label AnswerStatusLbl;
 		private System.Windows.Forms.Timer ResultTimer;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.Label KanjiLbl;
+		private System.Windows.Forms.Label TopQLbl;
 		private System.Windows.Forms.Button SettingsBtn;
 	}
 }

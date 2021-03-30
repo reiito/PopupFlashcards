@@ -13,11 +13,10 @@ namespace PopupFlashcards
 	public partial class FlashWindow : Form
 	{
 		SettingsWindow settingsWindow;
-		Settings settings;
 
-		List<Card> cards = new List<Card>();
+		public List<Card> cards = new List<Card>();
 
-		List<string> currentAnswers = new List<string>();
+		string[] currentAnswers;
 
 		const int maxChances = 4;
 		int chances = maxChances;
@@ -27,43 +26,53 @@ namespace PopupFlashcards
 
 		SoundPlayer player = new SoundPlayer();
 
-		int prevQuestionLimit = 10;
+		int prevQuestionLimit = 20;
 		List<string> previousQuestions = new List<string>();
 
 		SymSpell symSpell;
-
-		// Files
-		static readonly string resourcesFolderPath = AppContext.BaseDirectory + "resources\\";
-		public static readonly string settingsLocation = resourcesFolderPath + "settings.csv";
-		static readonly string cardsLocation = resourcesFolderPath + "cards.csv";
-		static readonly string dictionaryLocation = resourcesFolderPath + "frequency_dictionary_en_82_765.txt";
-		static readonly string popupSoundLocation = resourcesFolderPath + "notification.wav";
-		static readonly string correctSoundLocation = resourcesFolderPath + "correct.wav";
-		static readonly string incorrectSoundLocation = resourcesFolderPath + "incorrect.wav";
 
 		public FlashWindow()
 		{
 			InitializeComponent();
 
-			if (!Directory.Exists(resourcesFolderPath))
-				Directory.CreateDirectory(resourcesFolderPath);
+			FileManager.CreateFolders();
 
-			cards = LoadCardFile();
+			player.SoundLocation = FileManager.PopupSoundLocation;
 
-			player.SoundLocation = popupSoundLocation;
-
-			// settings
-			settings = new Settings();
-			settings.Load(settingsLocation);
-			settingsWindow = new SettingsWindow(this, settings, cards);
+			// settings setup
+			settingsWindow = new SettingsWindow(this);
 			settingsWindow.Hide();
+
+			// cards setup
+			if (settingsWindow.settings.VocabList.Equals("All"))
+			{
+				List<List<Card>> allVocabLists = new List<List<Card>>();
+				foreach (string file in Directory.GetFiles(FileManager.VocabPath, "*.csv"))
+				{
+					using (var reader = new StreamReader(file))
+					using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+						allVocabLists.Add(csv.GetRecords<Card>().ToList());
+				}
+
+				foreach (List<Card> cardList in allVocabLists)
+					foreach (Card card in cardList)
+						cards.Add(card);
+			}
+			else
+			{
+				using (var reader = new StreamReader(FileManager.VocabPath + settingsWindow.settings.VocabList + ".csv"))
+				using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+					cards = csv.GetRecords<Card>().ToList();
+			}
+
+			settingsWindow.SetTypeUI();
 
 			// spell check setup
 			const int initialCapacity = 82765;
 			const int maxEditDistance = 2;
 			const int prefixLength = 7;
 			symSpell = new SymSpell(initialCapacity, maxEditDistance, prefixLength);
-			if (!symSpell.LoadDictionary(dictionaryLocation, 0, 1)) { Console.Error.WriteLine("\rFile not found: " + Path.GetFullPath(dictionaryLocation)); Console.ReadKey(); return; }
+			if (!symSpell.LoadDictionary(FileManager.DictionaryLocation, 0, 1)) { Console.Error.WriteLine("\rFile not found: " + Path.GetFullPath(FileManager.DictionaryLocation)); return; }
 		}
 
 		private void Main_Load(object sender, EventArgs e)
@@ -80,9 +89,7 @@ namespace PopupFlashcards
 		private void Main_Resize(object sender, EventArgs e)
 		{
 			if (WindowState == FormWindowState.Minimized)
-			{
 				SendToSystemTray();
-			}
 		}
 
 		private void MinimizeNotify_Click(object sender, EventArgs e)
@@ -93,9 +100,7 @@ namespace PopupFlashcards
 		private void PopupTimer_Tick(object sender, EventArgs e)
 		{
 			if (!ShowInTaskbar)
-			{
 				ShowFromSystemTray();
-			}
 		}
 
 		void ResetValues()
@@ -103,7 +108,7 @@ namespace PopupFlashcards
 			chances = maxChances;
 			AnswerTxb.Text = "";
 			AnswerStatusLbl.Text = "";
-			currentAnswers = new List<string>();
+			currentAnswers = null;
 			Enabled = true;
 			GetRandomCard();
 		}
@@ -122,7 +127,7 @@ namespace PopupFlashcards
 
 		void ShowFromSystemTray()
 		{
-			player.SoundLocation = popupSoundLocation;
+			player.SoundLocation = FileManager.PopupSoundLocation;
 			player.Play();
 
 			PopupTimer.Stop();
@@ -137,15 +142,6 @@ namespace PopupFlashcards
 			WindowState = FormWindowState.Normal;
 		}
 
-		static List<Card> LoadCardFile()
-		{
-			using (var reader = new StreamReader(cardsLocation))
-			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-			{
-				return csv.GetRecords<Card>().ToList();
-			}
-		}
-
 		void GetRandomCard()
 		{
 			Random r = new Random();
@@ -154,27 +150,22 @@ namespace PopupFlashcards
 			bool decided = false;
 			while (!decided)
 			{
-				if (settings.PracticeType.Equals("All"))
-				{
+				if (settingsWindow.settings.PracticeType.Equals("All"))
 					decided = true;
-				}
-				else if (!cards[genRand].Type.Equals(settings.PracticeType))
-				{
-					genRand = r.Next(0, cards.Count);
-					continue;
-				}
+				else if (!cards[genRand].Type.Equals(settingsWindow.settings.PracticeType))
+					decided = false;
 
 				if (previousQuestions.Count == 0)
 				{
+					previousQuestions.Add(cards[genRand].GetJapaneseQuestions(settingsWindow.settings.Difficulty)[0]);
 					decided = true;
 				}
 				else
 				{
 					foreach (string q in previousQuestions)
 					{
-						if (q.Equals(cards[genRand].Hiragana))
+						if (q == cards[genRand].GetJapaneseQuestions(settingsWindow.settings.Difficulty)[0])
 						{
-							genRand = r.Next(0, cards.Count);
 							decided = false;
 							break;
 						}
@@ -183,17 +174,20 @@ namespace PopupFlashcards
 							if (previousQuestions.Count > prevQuestionLimit)
 								previousQuestions.RemoveAt(0);
 
-							previousQuestions.Add(cards[genRand].Hiragana);
+							previousQuestions.Add(cards[genRand].GetJapaneseQuestions(settingsWindow.settings.Difficulty)[0]);
 							decided = true;
 							break;
 						}
 					}
 				}
+
+				if (!decided)
+					genRand = r.Next(0, cards.Count);
 			}
 
-			QuestionLbl.Text = cards[genRand].Hiragana;
-			KanjiLbl.Text = cards[genRand].Kanji;
-			currentAnswers = cards[genRand].English.Split(';').ToList();
+			TopQLbl.Text = cards[genRand].GetJapaneseQuestions(settingsWindow.settings.Difficulty)[0];
+			BottomQLbl.Text = cards[genRand].GetJapaneseQuestions(settingsWindow.settings.Difficulty)[1];
+			currentAnswers = cards[genRand].GetEnglishAnswers();
 		}
 
 		private void SubmitBtn_Click(object sender, EventArgs e)
@@ -203,10 +197,10 @@ namespace PopupFlashcards
 			switch (chances)
 			{
 				case 2:
-					AnswerStatusLbl.Text = "Hint: " + cards[genRand].HardHint;
+					AnswerStatusLbl.Text = "Hint: " + cards[genRand].GetHints()[0];
 					break;
 				case 1:
-					AnswerStatusLbl.Text = "Hint: " + cards[genRand].EasyHint;
+					AnswerStatusLbl.Text = "Hint: " + cards[genRand].GetHints()[1];
 					break;
 				default:
 					AnswerStatusLbl.Text = "Incorrect, chances left: " + chances;
@@ -218,12 +212,12 @@ namespace PopupFlashcards
 				if (CorrectAnswerCheck())
 				{
 					AnswerStatusLbl.Text = "Correct!";
-					player.SoundLocation = correctSoundLocation;
+					player.SoundLocation = FileManager.CorrectSoundLocation;
 				}
 				else
 				{
 					AnswerStatusLbl.Text = "You'll get it next time!";
-					player.SoundLocation = incorrectSoundLocation;
+					player.SoundLocation = FileManager.IncorrectSoundLocation;
 				}
 					
 
@@ -310,5 +304,24 @@ namespace PopupFlashcards
 			Enabled = false;
 			settingsWindow.Show();
 		}
+
+		//public void ChangeProgramLanguage()
+		//{
+		//	if (settingsWindow.settings.Difficulty.Equals("Hard"))
+		//	{
+		//		SubmitBtn.Text = "差し出す";
+		//		SettingsBtn.Text = "設定";
+		//	}
+		//	else if (settingsWindow.settings.Difficulty.Equals("Medium"))
+		//	{
+		//		SubmitBtn.Text = "さしだす";
+		//		SettingsBtn.Text = "せってい";
+		//	}
+		//	else
+		//	{
+		//		SubmitBtn.Text = "Submit";
+		//		SettingsBtn.Text = "Settings";
+		//	}
+		//}
 	}
 }
