@@ -11,10 +11,10 @@ namespace PopupFlashcards
 	{
 
 		public int PopupTime { get; set; }
-		public string Difficulty { get; set; }
+		public string CurrentLesson { get; set; }
+		public decimal Frequency { get; set; }
 		public string VocabList { get; set; }
-		public string PracticeType { get; set; }
-		public string AnswersIn { get; set; }
+		public bool KanjiOnly { get; set; }
 
 		public int GetPopupTimeInMilliseconds()
 		{
@@ -25,13 +25,13 @@ namespace PopupFlashcards
 		{
 		}
 
-		public Settings(int time, string diff, string vocab, string type, string ans)
+		public Settings(int time, string currLess, decimal freq, string vocab, bool kanji)
 		{
 			PopupTime = time;
-			Difficulty = diff;
+			CurrentLesson = currLess;
+			Frequency = freq;
 			VocabList = vocab;
-			PracticeType = type;
-			AnswersIn = ans;
+			KanjiOnly = kanji;
 		}
 
 		public void Load()
@@ -47,10 +47,10 @@ namespace PopupFlashcards
 			foreach (Settings settings in loadedSettings)
 			{
 				PopupTime = settings.PopupTime;
-				Difficulty = settings.Difficulty;
+				CurrentLesson = settings.CurrentLesson;
+				Frequency = settings.Frequency;
 				VocabList = settings.VocabList;
-				PracticeType = settings.PracticeType;
-				AnswersIn = settings.AnswersIn;
+				KanjiOnly = Convert.ToBoolean(settings.KanjiOnly);
 			}
 		}
 

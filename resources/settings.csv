@@ -1,2 +1,2 @@
-PopupTime,Difficulty,VocabList,PracticeType,AnswersIn
-1,Medium,みん日L29,All,English
+PopupTime,CurrentLesson,Frequency,VocabList,KanjiOnly
+1,L37,0.5,All,False

@@ -2,35 +2,42 @@
 {
 	public class Card
 	{
-		public string Japanese { get; set; }
-		public string English { get; set; }
-		public string Hints { get; set; }
-		public string Type { get; set; }
+		public string Set { get; set; }
+		public string Word { get; set; }
+		public string Kanji { get; set; }
+		public string Meaning { get; set; }
 
-		public string[] GetJapaneseQuestions(string difficulty)
+		public string GetAnswer()
 		{
-			string[] japaneseArray = Japanese.Split(';');
-			switch (difficulty)
-			{
-				case "Easy":
-					return new string[] { japaneseArray[1], japaneseArray[2] };
-				case "Medium":
-					return new string[] { japaneseArray[0], japaneseArray[1] };
-				case "Hard":
-					return new string[] { japaneseArray[0], "" };
-				default:
-					return japaneseArray;
-			}
+			if (Meaning.Contains("("))
+				return Meaning.Split('(')[0];
+			else
+				return Meaning;
 		}
 
-		public string[] GetEnglishAnswers()
+		public string[] GetAnswers()
 		{
-			return English.Split(';');
+			string aloneAnswer;
+			string[] splitAnswer;
+
+			if (Meaning.Contains("("))
+				aloneAnswer = Meaning.Split('(')[0];
+			else
+				aloneAnswer = Meaning;
+
+			splitAnswer = aloneAnswer.Split('/');
+			for (int i = 0; i < splitAnswer.Length; i++)
+				splitAnswer[i] = splitAnswer[i].Trim();
+
+			return splitAnswer;
 		}
 
-		public string[] GetHints()
+		public string GetAnswerNote()
 		{
-			return Hints.Split(';');
+			if (Meaning.Contains("("))
+				return Meaning.Split('(')[1].Replace(")", "");
+			else
+				return "";
 		}
 	}
 }

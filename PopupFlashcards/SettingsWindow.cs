@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PopupFlashcards
@@ -23,84 +24,32 @@ namespace PopupFlashcards
 			// timer setup
 			flashWindow.PopupTimer.Interval = settings.GetPopupTimeInMilliseconds();
 
-			// difficulty setup
-			DifficultyCmb.Items.AddRange(new object[] { "Easy", "Medium", "Hard" });
-
 			// vocab setup
-			VocabCmb.Items.Add("All");
-			foreach (FileInfo file in new DirectoryInfo(FileManager.VocabPath).GetFiles("*.csv"))
-				VocabCmb.Items.Add(Path.GetFileNameWithoutExtension(file.Name));
+			VocabCmb.Items.AddRange(new object[] { "All", "Mina", "N#" });
 
-			// answer setup
-			AnswersInCmb.Items.AddRange(new object[] { "English", "Japanese" });
+			// kanji setup
+			KanjiCmb.Items.AddRange(new object[] { "TRUE", "FALSE" });
 
 			SetSettingsUI();
 		}
 
-		public void SetTypeUI()
+		public void SetLessonUI()
 		{
 			// type setup
-			PracticeTypeCmb.Items.Add("All");
 			foreach (Card card in flashWindow.cards)
-				if (!PracticeTypeCmb.Items.Contains(card.Type))
-					PracticeTypeCmb.Items.Add(card.Type);
-			PracticeTypeCmb.SelectedItem = settings.PracticeType;
+				if (!CurrentLessonCmb.Items.Contains(card.Set))
+					CurrentLessonCmb.Items.Add(card.Set);
+			CurrentLessonCmb.SelectedItem = settings.CurrentLesson;
 		}
 
 		void SetSettingsUI()
 		{
 			PopupTimerNum.Value = settings.PopupTime;
-			DifficultyCmb.SelectedItem = settings.Difficulty;
+			CurrentLessonCmb.SelectedItem = settings.CurrentLesson;
+			FrequencyNum.Value = settings.Frequency;
 			VocabCmb.SelectedItem = settings.VocabList;
-			PracticeTypeCmb.SelectedItem = settings.PracticeType;
-			AnswersInCmb.SelectedItem = settings.AnswersIn;
+			KanjiCmb.SelectedIndex = settings.KanjiOnly ? 0 : 1;
 		}
-
-		//public void ChangeProgramLanguage()
-		//{
-		//	if (settings.Difficulty.Equals("Hard"))
-		//	{
-		//		PopupTimerLbl.Text = "間隔計時機構";
-		//		DifficultyLbl.Text = "困難";
-		//		DifficultyCmb.Items.Clear();
-		//		DifficultyCmb.Items.AddRange(new object[] { "容易", "並", "難しい" });
-		//		VocabLbl.Text = "語彙";
-		//		PracticeTypeLbl.Text = "練習型";
-		//		AnswersInLbl.Text = "解答";
-		//		AnswersInCmb.Items.Clear();
-		//		AnswersInCmb.Items.AddRange(new object[] { "英語", "日本語" });
-		//		CancelBtn.Text = "キャンセル";
-		//		SaveBtn.Text = "セーブ";
-		//	}
-		//	else if (settings.Difficulty.Equals("Medium"))
-		//	{
-		//		PopupTimerLbl.Text = "かんかくけいじきこう";
-		//		DifficultyLbl.Text = "こんなん";
-		//		DifficultyCmb.Items.Clear();
-		//		DifficultyCmb.Items.AddRange(new object[] { "ようい", "なみ", "むずかしい" });
-		//		VocabLbl.Text = "ごい";
-		//		PracticeTypeLbl.Text = "れんしゅうかた";
-		//		AnswersInLbl.Text = "かいとうは";
-		//		AnswersInCmb.Items.Clear();
-		//		AnswersInCmb.Items.AddRange(new object[] { "えいご", "にほんご" });
-		//		CancelBtn.Text = "キャンセル";
-		//		SaveBtn.Text = "セーブ";
-		//	}
-		//	else
-		//	{
-		//		PopupTimerLbl.Text = "Popup Timer";
-		//		DifficultyLbl.Text = "Difficulty";
-		//		DifficultyCmb.Items.Clear();
-		//		DifficultyCmb.Items.AddRange(new object[] { "Easy", "Medium", "Hard" });
-		//		VocabLbl.Text = "Vocabulary";
-		//		PracticeTypeLbl.Text = "Practice Type";
-		//		AnswersInLbl.Text = "Answers In";
-		//		AnswersInCmb.Items.Clear();
-		//		AnswersInCmb.Items.AddRange(new object[] { "English", "Japanese" });
-		//		CancelBtn.Text = "Cancel";
-		//		SaveBtn.Text = "Save";
-		//	}
-		//}
 
 		private void SettingsWindow_Shown(object sender, System.EventArgs e)
 		{
@@ -111,10 +60,10 @@ namespace PopupFlashcards
 		{
 			settings = new Settings(
 				(int)PopupTimerNum.Value,
-				DifficultyCmb.SelectedItem.ToString(),
+				CurrentLessonCmb.SelectedItem.ToString(),
+				FrequencyNum.Value,
 				VocabCmb.SelectedItem.ToString(),
-				PracticeTypeCmb.SelectedItem.ToString(),
-				AnswersInCmb.SelectedItem.ToString()
+				Convert.ToBoolean(KanjiCmb.SelectedItem)
 			);
 
 			flashWindow.PopupTimer.Interval = settings.GetPopupTimeInMilliseconds();

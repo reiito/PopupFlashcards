@@ -31,25 +31,27 @@ namespace PopupFlashcards
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-			this.VocabCmb = new System.Windows.Forms.ComboBox();
-			this.VocabLbl = new System.Windows.Forms.Label();
+			this.FrequencyLbl = new System.Windows.Forms.Label();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.PopupTimerNum = new System.Windows.Forms.NumericUpDown();
 			this.PopupTimerLbl = new System.Windows.Forms.Label();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.DifficultyCmb = new System.Windows.Forms.ComboBox();
-			this.DifficultyLbl = new System.Windows.Forms.Label();
+			this.CurrentLessonCmb = new System.Windows.Forms.ComboBox();
+			this.CurrentLessonLbl = new System.Windows.Forms.Label();
 			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
 			this.SaveBtn = new System.Windows.Forms.Button();
 			this.CancelBtn = new System.Windows.Forms.Button();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.AnswersInLbl = new System.Windows.Forms.Label();
-			this.AnswersInCmb = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-			this.PracticeTypeLbl = new System.Windows.Forms.Label();
-			this.PracticeTypeCmb = new System.Windows.Forms.ComboBox();
+			this.VocabLbl = new System.Windows.Forms.Label();
+			this.KanjiLbl = new System.Windows.Forms.Label();
+			this.VocabCmb = new System.Windows.Forms.ComboBox();
+			this.KanjiCmb = new System.Windows.Forms.ComboBox();
+			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+			this.label2 = new System.Windows.Forms.Label();
+			this.FrequencyNum = new System.Windows.Forms.NumericUpDown();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel6.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -59,6 +61,8 @@ namespace PopupFlashcards
 			this.tableLayoutPanel7.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
+			this.tableLayoutPanel9.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.FrequencyNum)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -89,8 +93,8 @@ namespace PopupFlashcards
 			this.tableLayoutPanel6.ColumnCount = 1;
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel6.Controls.Add(this.VocabCmb, 0, 1);
-			this.tableLayoutPanel6.Controls.Add(this.VocabLbl, 0, 0);
+			this.tableLayoutPanel6.Controls.Add(this.tableLayoutPanel9, 0, 1);
+			this.tableLayoutPanel6.Controls.Add(this.FrequencyLbl, 0, 0);
 			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 165);
 			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -101,31 +105,19 @@ namespace PopupFlashcards
 			this.tableLayoutPanel6.Size = new System.Drawing.Size(278, 75);
 			this.tableLayoutPanel6.TabIndex = 6;
 			// 
-			// VocabCmb
+			// FrequencyLbl
 			// 
-			this.VocabCmb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-			this.VocabCmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.VocabCmb.FormattingEnabled = true;
-			this.VocabCmb.Location = new System.Drawing.Point(67, 40);
-			this.VocabCmb.Name = "VocabCmb";
-			this.VocabCmb.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.VocabCmb.Size = new System.Drawing.Size(143, 33);
-			this.VocabCmb.TabIndex = 4;
-			this.VocabCmb.SelectedIndexChanged += new System.EventHandler(this.ElementValueChanged);
-			// 
-			// VocabLbl
-			// 
-			this.VocabLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.FrequencyLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.VocabLbl.AutoSize = true;
-			this.VocabLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.VocabLbl.Location = new System.Drawing.Point(3, 0);
-			this.VocabLbl.Name = "VocabLbl";
-			this.VocabLbl.Size = new System.Drawing.Size(272, 37);
-			this.VocabLbl.TabIndex = 2;
-			this.VocabLbl.Text = "Vocabulary";
-			this.VocabLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.FrequencyLbl.AutoSize = true;
+			this.FrequencyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.FrequencyLbl.Location = new System.Drawing.Point(3, 0);
+			this.FrequencyLbl.Name = "FrequencyLbl";
+			this.FrequencyLbl.Size = new System.Drawing.Size(272, 37);
+			this.FrequencyLbl.TabIndex = 2;
+			this.FrequencyLbl.Text = "Frequency";
+			this.FrequencyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -201,8 +193,8 @@ namespace PopupFlashcards
 			this.tableLayoutPanel5.ColumnCount = 1;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel5.Controls.Add(this.DifficultyCmb, 0, 1);
-			this.tableLayoutPanel5.Controls.Add(this.DifficultyLbl, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.CurrentLessonCmb, 0, 1);
+			this.tableLayoutPanel5.Controls.Add(this.CurrentLessonLbl, 0, 0);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 84);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -212,31 +204,31 @@ namespace PopupFlashcards
 			this.tableLayoutPanel5.Size = new System.Drawing.Size(278, 75);
 			this.tableLayoutPanel5.TabIndex = 2;
 			// 
-			// DifficultyCmb
+			// CurrentLessonCmb
 			// 
-			this.DifficultyCmb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-			this.DifficultyCmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.DifficultyCmb.FormattingEnabled = true;
-			this.DifficultyCmb.Location = new System.Drawing.Point(67, 40);
-			this.DifficultyCmb.Name = "DifficultyCmb";
-			this.DifficultyCmb.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.DifficultyCmb.Size = new System.Drawing.Size(143, 33);
-			this.DifficultyCmb.TabIndex = 3;
-			this.DifficultyCmb.SelectedIndexChanged += new System.EventHandler(this.DifficultyCmb_SelectedIndexChanged);
+			this.CurrentLessonCmb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.CurrentLessonCmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.CurrentLessonCmb.FormattingEnabled = true;
+			this.CurrentLessonCmb.Location = new System.Drawing.Point(67, 40);
+			this.CurrentLessonCmb.Name = "CurrentLessonCmb";
+			this.CurrentLessonCmb.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.CurrentLessonCmb.Size = new System.Drawing.Size(143, 33);
+			this.CurrentLessonCmb.TabIndex = 3;
+			this.CurrentLessonCmb.SelectedIndexChanged += new System.EventHandler(this.DifficultyCmb_SelectedIndexChanged);
 			// 
-			// DifficultyLbl
+			// CurrentLessonLbl
 			// 
-			this.DifficultyLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.CurrentLessonLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.DifficultyLbl.AutoSize = true;
-			this.DifficultyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.DifficultyLbl.Location = new System.Drawing.Point(3, 0);
-			this.DifficultyLbl.Name = "DifficultyLbl";
-			this.DifficultyLbl.Size = new System.Drawing.Size(272, 37);
-			this.DifficultyLbl.TabIndex = 1;
-			this.DifficultyLbl.Text = "Difficulty";
-			this.DifficultyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.CurrentLessonLbl.AutoSize = true;
+			this.CurrentLessonLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.CurrentLessonLbl.Location = new System.Drawing.Point(3, 0);
+			this.CurrentLessonLbl.Name = "CurrentLessonLbl";
+			this.CurrentLessonLbl.Size = new System.Drawing.Size(272, 37);
+			this.CurrentLessonLbl.TabIndex = 1;
+			this.CurrentLessonLbl.Text = "Current Lesson";
+			this.CurrentLessonLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// tableLayoutPanel7
 			// 
@@ -257,6 +249,7 @@ namespace PopupFlashcards
 			// SaveBtn
 			// 
 			this.SaveBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.SaveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.SaveBtn.Location = new System.Drawing.Point(158, 3);
 			this.SaveBtn.Name = "SaveBtn";
 			this.SaveBtn.Size = new System.Drawing.Size(100, 44);
@@ -268,6 +261,7 @@ namespace PopupFlashcards
 			// CancelBtn
 			// 
 			this.CancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.CancelBtn.Location = new System.Drawing.Point(19, 3);
 			this.CancelBtn.Name = "CancelBtn";
 			this.CancelBtn.Size = new System.Drawing.Size(100, 44);
@@ -281,8 +275,8 @@ namespace PopupFlashcards
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Controls.Add(this.AnswersInLbl, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.AnswersInCmb, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.KanjiCmb, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.KanjiLbl, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 327);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -293,39 +287,13 @@ namespace PopupFlashcards
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(278, 75);
 			this.tableLayoutPanel2.TabIndex = 7;
 			// 
-			// AnswersInLbl
-			// 
-			this.AnswersInLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.AnswersInLbl.AutoSize = true;
-			this.AnswersInLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.AnswersInLbl.Location = new System.Drawing.Point(3, 0);
-			this.AnswersInLbl.Name = "AnswersInLbl";
-			this.AnswersInLbl.Size = new System.Drawing.Size(272, 37);
-			this.AnswersInLbl.TabIndex = 4;
-			this.AnswersInLbl.Text = "Answers In";
-			this.AnswersInLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// AnswersInCmb
-			// 
-			this.AnswersInCmb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-			this.AnswersInCmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.AnswersInCmb.FormattingEnabled = true;
-			this.AnswersInCmb.Location = new System.Drawing.Point(67, 40);
-			this.AnswersInCmb.Name = "AnswersInCmb";
-			this.AnswersInCmb.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.AnswersInCmb.Size = new System.Drawing.Size(143, 33);
-			this.AnswersInCmb.TabIndex = 3;
-			this.AnswersInCmb.SelectedIndexChanged += new System.EventHandler(this.ElementValueChanged);
-			// 
 			// tableLayoutPanel8
 			// 
 			this.tableLayoutPanel8.ColumnCount = 1;
 			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel8.Controls.Add(this.PracticeTypeLbl, 0, 0);
-			this.tableLayoutPanel8.Controls.Add(this.PracticeTypeCmb, 0, 1);
+			this.tableLayoutPanel8.Controls.Add(this.VocabCmb, 0, 1);
+			this.tableLayoutPanel8.Controls.Add(this.VocabLbl, 0, 0);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 246);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
@@ -335,31 +303,104 @@ namespace PopupFlashcards
 			this.tableLayoutPanel8.Size = new System.Drawing.Size(278, 75);
 			this.tableLayoutPanel8.TabIndex = 8;
 			// 
-			// PracticeTypeLbl
+			// VocabLbl
 			// 
-			this.PracticeTypeLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.VocabLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.PracticeTypeLbl.AutoSize = true;
-			this.PracticeTypeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.PracticeTypeLbl.Location = new System.Drawing.Point(3, 0);
-			this.PracticeTypeLbl.Name = "PracticeTypeLbl";
-			this.PracticeTypeLbl.Size = new System.Drawing.Size(272, 37);
-			this.PracticeTypeLbl.TabIndex = 1;
-			this.PracticeTypeLbl.Text = "Practice Type";
-			this.PracticeTypeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.VocabLbl.AutoSize = true;
+			this.VocabLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.VocabLbl.Location = new System.Drawing.Point(3, 0);
+			this.VocabLbl.Name = "VocabLbl";
+			this.VocabLbl.Size = new System.Drawing.Size(272, 37);
+			this.VocabLbl.TabIndex = 3;
+			this.VocabLbl.Text = "Vocabulary List";
+			this.VocabLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// PracticeTypeCmb
+			// KanjiLbl
 			// 
-			this.PracticeTypeCmb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-			this.PracticeTypeCmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.PracticeTypeCmb.FormattingEnabled = true;
-			this.PracticeTypeCmb.Location = new System.Drawing.Point(67, 40);
-			this.PracticeTypeCmb.Name = "PracticeTypeCmb";
-			this.PracticeTypeCmb.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.PracticeTypeCmb.Size = new System.Drawing.Size(143, 33);
-			this.PracticeTypeCmb.TabIndex = 2;
-			this.PracticeTypeCmb.SelectedIndexChanged += new System.EventHandler(this.ElementValueChanged);
+			this.KanjiLbl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.KanjiLbl.AutoSize = true;
+			this.KanjiLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.KanjiLbl.Location = new System.Drawing.Point(3, 0);
+			this.KanjiLbl.Name = "KanjiLbl";
+			this.KanjiLbl.Size = new System.Drawing.Size(272, 37);
+			this.KanjiLbl.TabIndex = 3;
+			this.KanjiLbl.Text = "Kanji Only";
+			this.KanjiLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// VocabCmb
+			// 
+			this.VocabCmb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.VocabCmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.VocabCmb.FormattingEnabled = true;
+			this.VocabCmb.Location = new System.Drawing.Point(67, 40);
+			this.VocabCmb.Name = "VocabCmb";
+			this.VocabCmb.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.VocabCmb.Size = new System.Drawing.Size(143, 33);
+			this.VocabCmb.TabIndex = 5;
+			// 
+			// KanjiCmb
+			// 
+			this.KanjiCmb.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.KanjiCmb.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.KanjiCmb.FormattingEnabled = true;
+			this.KanjiCmb.Location = new System.Drawing.Point(67, 40);
+			this.KanjiCmb.Name = "KanjiCmb";
+			this.KanjiCmb.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.KanjiCmb.Size = new System.Drawing.Size(143, 33);
+			this.KanjiCmb.TabIndex = 5;
+			// 
+			// tableLayoutPanel9
+			// 
+			this.tableLayoutPanel9.ColumnCount = 2;
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57F));
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43F));
+			this.tableLayoutPanel9.Controls.Add(this.label2, 1, 0);
+			this.tableLayoutPanel9.Controls.Add(this.FrequencyNum, 0, 0);
+			this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 40);
+			this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+			this.tableLayoutPanel9.RowCount = 1;
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel9.Size = new System.Drawing.Size(272, 32);
+			this.tableLayoutPanel9.TabIndex = 3;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Dock = System.Windows.Forms.DockStyle.Left;
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.Location = new System.Drawing.Point(158, 0);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(30, 36);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "%";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// FrequencyNum
+			// 
+			this.FrequencyNum.DecimalPlaces = 1;
+			this.FrequencyNum.Dock = System.Windows.Forms.DockStyle.Right;
+			this.FrequencyNum.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.FrequencyNum.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+			this.FrequencyNum.Location = new System.Drawing.Point(95, 3);
+			this.FrequencyNum.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.FrequencyNum.Name = "FrequencyNum";
+			this.FrequencyNum.ReadOnly = true;
+			this.FrequencyNum.Size = new System.Drawing.Size(57, 30);
+			this.FrequencyNum.TabIndex = 2;
+			this.FrequencyNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// SettingsWindow
 			// 
@@ -389,6 +430,9 @@ namespace PopupFlashcards
 			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel8.ResumeLayout(false);
 			this.tableLayoutPanel8.PerformLayout();
+			this.tableLayoutPanel9.ResumeLayout(false);
+			this.tableLayoutPanel9.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.FrequencyNum)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -401,20 +445,22 @@ namespace PopupFlashcards
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-		private System.Windows.Forms.Label PracticeTypeLbl;
-		private System.Windows.Forms.ComboBox PracticeTypeCmb;
 		private System.Windows.Forms.NumericUpDown PopupTimerNum;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-		private System.Windows.Forms.ComboBox VocabCmb;
-		private System.Windows.Forms.Label VocabLbl;
-		private System.Windows.Forms.ComboBox DifficultyCmb;
-		private System.Windows.Forms.Label DifficultyLbl;
+		private System.Windows.Forms.Label FrequencyLbl;
+		private System.Windows.Forms.ComboBox CurrentLessonCmb;
+		private System.Windows.Forms.Label CurrentLessonLbl;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
 		private System.Windows.Forms.Button SaveBtn;
 		private System.Windows.Forms.Button CancelBtn;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.Label AnswersInLbl;
-		private System.Windows.Forms.ComboBox AnswersInCmb;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+		private System.Windows.Forms.ComboBox KanjiCmb;
+		private System.Windows.Forms.Label KanjiLbl;
+		private System.Windows.Forms.ComboBox VocabCmb;
+		private System.Windows.Forms.Label VocabLbl;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.NumericUpDown FrequencyNum;
 	}
 }
