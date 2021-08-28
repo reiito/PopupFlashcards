@@ -67,6 +67,8 @@ namespace PopupFlashcards
 			);
 
 			flashWindow.PopupTimer.Interval = settings.GetPopupTimeInMilliseconds();
+			flashWindow.LoadCards();
+			SetLessonUI();
 
 			settings.Save();
 

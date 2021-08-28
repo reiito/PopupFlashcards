@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5CECCB57-C1C9-42DD-A7CF-6837F5957429}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>PopupFlashcards</RootNamespace>
     <AssemblyName>PopupFlashcards</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>

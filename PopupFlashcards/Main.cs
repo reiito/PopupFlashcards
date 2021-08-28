@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace PopupFlashcards
 {
+
 	public partial class FlashWindow : Form
 	{
 		SettingsWindow settingsWindow;
@@ -17,15 +18,15 @@ namespace PopupFlashcards
 		public List<Card> cards = new List<Card>();
 		public List<Card> currentLessonCards = new List<Card>();
 
-		string[] currentAnswers;
 		List<Button> answerButtons = new List<Button>();
 		Button correctAnswerButton;
 
 		const int maxChances = 2;
 		int chances = maxChances;
 		int genRand = -1;
-		int prevQuestionLimit = 20;
-		List<string> previousQuestions = new List<string>();
+
+		int previousLimit = 2;
+		List<Card> previousCards;
 
 		bool first = true;
 
@@ -44,16 +45,37 @@ namespace PopupFlashcards
 			settingsWindow.Hide();
 
 			// cards setup
+			LoadCards();
+			previousCards = new List<Card>();
+
+			// answer button setup
+			var c = GetAll(this, typeof(Button));
+			foreach (Button b in c)
+				if (b.Name.Contains("Ans"))
+					answerButtons.Add(b);
+
+			settingsWindow.SetLessonUI();
+		}
+
+		public void LoadCards()
+		{
 			using (var reader = new StreamReader(FileManager.VocabLocation))
 			using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
 				cards = csv.GetRecords<Card>().ToList();
 
-			// answer button setup
-			answerButtons.Add(Ans1Btn);
-			answerButtons.Add(Ans2Btn);
-			answerButtons.Add(Ans3Btn);
+			for (int i = cards.Count - 1; i >= 0; i--)
+			{
+				if (settingsWindow.settings.VocabList == "Mina" && cards[i].Set.Contains("N"))
+					cards.RemoveAt(i);
+				else if (settingsWindow.settings.VocabList == "N#" && cards[i].Set.Contains("L"))
+					cards.RemoveAt(i);
+			}
+		}
 
-			settingsWindow.SetLessonUI();
+		private IEnumerable<Control> GetAll(Control control, Type type)
+		{
+			var controls = control.Controls.Cast<Control>();
+			return controls.SelectMany(ctrl => GetAll(ctrl, type)).Concat(controls).Where(c => c.GetType() == type);
 		}
 
 		private void Main_Load(object sender, EventArgs e)
@@ -82,20 +104,18 @@ namespace PopupFlashcards
 				ShowFromSystemTray();
 		}
 
-		void ResetValues()
+		private void ResetValues()
 		{
 			chances = maxChances;
 			AnswerStatusLbl.Text = "";
-			currentAnswers = null;
 			Enabled = true;
+			correctAnswerButton = null;
 			foreach (Button b in answerButtons)
-			{
 				b.BackColor = SystemColors.Control;
-			}
 			GetRandomCard();
 		}
 
-		void SendToSystemTray()
+		private void SendToSystemTray()
 		{
 			Hide();
 			ShowInTaskbar = false;
@@ -107,7 +127,7 @@ namespace PopupFlashcards
 			PopupTimer.Start();
 		}
 
-		void ShowFromSystemTray()
+		private void ShowFromSystemTray()
 		{
 			player.SoundLocation = FileManager.PopupSoundLocation;
 			player.Play();
@@ -122,13 +142,50 @@ namespace PopupFlashcards
 			WindowState = FormWindowState.Normal;
 		}
 
-		void GetRandomCard()
+		private void GetRandomCard()
 		{
 			Random r = new Random();
 			genRand = r.Next(0, cards.Count);
 
-			TopQLbl.Text = cards[genRand].Kanji;
-			BottomQLbl.Text = cards[genRand].Word;
+			bool cardFound = false;
+			double freqRand = r.NextDouble();
+			while (!cardFound)
+			{
+				if (freqRand < (float)settingsWindow.settings.Frequency && cards[genRand].Set != settingsWindow.settings.CurrentLesson)
+				{
+					genRand = r.Next(0, cards.Count);
+					continue;
+				}
+
+				if (previousCards.Contains(cards[genRand]))
+				{
+					Console.WriteLine("previous card, no!");
+					genRand = r.Next(0, cards.Count);
+				}
+				else
+				{
+					if (previousCards.Count >= previousLimit)
+						previousCards.RemoveAt(0);
+
+					previousCards.Add(cards[genRand]);
+					foreach (Card c in previousCards)
+					{
+						Console.WriteLine(c.Meaning);
+					}
+					cardFound = true;
+				}
+			}
+
+			if (cards[genRand].Kanji != "")
+			{
+				TopQLbl.Text = settingsWindow.settings.KanjiOnly ? "" : cards[genRand].Word;
+				BottomQLbl.Text = cards[genRand].Kanji;
+			}
+			else
+			{
+				TopQLbl.Text = "";
+				BottomQLbl.Text = cards[genRand].Word;
+			}
 
 			int randAnswerButton = r.Next(0, answerButtons.Count);
 			correctAnswerButton = answerButtons[randAnswerButton];

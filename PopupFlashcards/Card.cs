@@ -10,7 +10,15 @@
 		public string GetAnswer()
 		{
 			if (Meaning.Contains("("))
-				return Meaning.Split('(')[0];
+			{
+				string splitAnswer;
+				if (Meaning.Split('(')[0] != "")
+					splitAnswer = Meaning.Split('(')[0].Trim();
+				else
+					splitAnswer = Meaning.Split(')')[1].Trim();
+
+				return splitAnswer;
+			}
 			else
 				return Meaning;
 		}
@@ -21,7 +29,12 @@
 			string[] splitAnswer;
 
 			if (Meaning.Contains("("))
-				aloneAnswer = Meaning.Split('(')[0];
+			{
+				if (Meaning.Split('(')[0] != "")
+					aloneAnswer = Meaning.Split('(')[0].Trim();
+				else
+					aloneAnswer = Meaning.Split(')')[1].Trim();
+			}
 			else
 				aloneAnswer = Meaning;
 
@@ -35,7 +48,7 @@
 		public string GetAnswerNote()
 		{
 			if (Meaning.Contains("("))
-				return Meaning.Split('(')[1].Replace(")", "");
+				return Meaning.Split('(', ')')[1];
 			else
 				return "";
 		}

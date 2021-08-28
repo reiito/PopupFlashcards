@@ -45,7 +45,7 @@ L01,フランス,,France
 L01,ブラジル,,Brazil
 L01,さくらだいがく,桜大学,fictitious university
 L01,ふじだいがく,富士大学,fictitious university
-L01,ＩＭＣ ／ パワーでんき ／ブラジルエアー,ＩＭＣ ／ パワー電気／ブラジルエアー,fictitious company
+L01,ＩＭＣ / パワーでんき /ブラジルエアー,ＩＭＣ / パワー電気/ブラジルエアー,fictitious company
 L01,ＡＫＣ,,fictitious university
 L01,こうべびょういん,神戸病院,fictitious hospital
 L02,これ,,this (thing here)
@@ -999,8 +999,8 @@ L24,しょうかいします,紹介します,introduce
 L24,あんないします,案内します,show around / show the way
 L24,せつめいします,説明します,explain
 L24,いれます[コーヒーを],,make (coffee)
-L24,おじいさん／おじいちゃん,,grandfather / old man
-L24,おばあさん／おばあちゃん,,grandmother / old woman
+L24,おじいさん/おじいちゃん,,grandfather / old man
+L24,おばあさん/おばあちゃん,,grandmother / old woman
 L24,じゅんび[～します],準備[～します],preparation (prepare)
 L24,いみ,意味,meaning
 L24,[お]かし,[お]菓子,sweets / snacks
