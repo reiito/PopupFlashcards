@@ -25,7 +25,6 @@ namespace PopupFlashcards
 		int chances = maxChances;
 		int genRand = -1;
 
-		int previousLimit = 2;
 		List<Card> previousCards;
 
 		bool first = true;
@@ -76,6 +75,20 @@ namespace PopupFlashcards
 		{
 			var controls = control.Controls.Cast<Control>();
 			return controls.SelectMany(ctrl => GetAll(ctrl, type)).Concat(controls).Where(c => c.GetType() == type);
+		}
+
+		private List<Card> GetLessonCards(string lessonNum)
+		{
+			List<Card> lCards = new List<Card>();
+			foreach (Card c in cards)
+			{
+				if (c.Set.Contains(lessonNum))
+				{
+					lCards.Add(c);
+				}
+			}
+
+			return lCards;
 		}
 
 		private void Main_Load(object sender, EventArgs e)
@@ -159,19 +172,15 @@ namespace PopupFlashcards
 
 				if (previousCards.Contains(cards[genRand]))
 				{
-					Console.WriteLine("previous card, no!");
 					genRand = r.Next(0, cards.Count);
+					continue;
 				}
 				else
 				{
-					if (previousCards.Count >= previousLimit)
-						previousCards.RemoveAt(0);
+					if (previousCards.Count >= GetLessonCards(settingsWindow.settings.CurrentLesson).Count)
+						previousCards = new List<Card>();
 
 					previousCards.Add(cards[genRand]);
-					foreach (Card c in previousCards)
-					{
-						Console.WriteLine(c.Meaning);
-					}
 					cardFound = true;
 				}
 			}
