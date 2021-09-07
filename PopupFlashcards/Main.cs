@@ -201,8 +201,25 @@ namespace PopupFlashcards
 			answerButtons[randAnswerButton].Text = cards[genRand].GetAnswer();
 			foreach (Button ab in answerButtons)
 			{
-				if (ab.Text != cards[genRand].GetAnswer())
-					ab.Text = cards[r.Next(0, cards.Count)].GetAnswer();
+				Card tempCard = cards[r.Next(0, cards.Count)];
+				while (true)
+				{
+					if (tempCard.GetAnswer() == cards[genRand].GetAnswer())
+					{
+						tempCard = cards[r.Next(0, cards.Count)];
+						continue;
+					}
+
+					if (cards[genRand].Kanji.Contains("ます") && !tempCard.Kanji.Contains("ます"))
+					{
+						tempCard = cards[r.Next(0, cards.Count)];
+						continue;
+					}
+
+					break;
+				}
+
+				ab.Text = tempCard.GetAnswer();
 			}
 		}
 
