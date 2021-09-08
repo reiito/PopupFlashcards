@@ -201,6 +201,9 @@ namespace PopupFlashcards
 			answerButtons[randAnswerButton].Text = cards[genRand].GetAnswer();
 			foreach (Button ab in answerButtons)
 			{
+				if (ab == answerButtons[randAnswerButton])
+					continue;
+
 				Card tempCard = cards[r.Next(0, cards.Count)];
 				while (true)
 				{
