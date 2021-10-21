@@ -21,11 +21,11 @@ namespace PopupFlashcards
 		List<Button> answerButtons = new List<Button>();
 		Button correctAnswerButton;
 
-		const int maxChances = 2;
-		int chances = maxChances;
 		int genRand = -1;
 
+		Card currentCard;
 		List<Card> previousCards;
+		List<Card> correctCards;
 
 		bool first = true;
 
@@ -46,6 +46,7 @@ namespace PopupFlashcards
 			// cards setup
 			LoadCards();
 			previousCards = new List<Card>();
+			correctCards = new List<Card>();
 
 			// answer button setup
 			var c = GetAll(this, typeof(Button));
@@ -119,7 +120,6 @@ namespace PopupFlashcards
 
 		private void ResetValues()
 		{
-			chances = maxChances;
 			AnswerStatusLbl.Text = "";
 			Enabled = true;
 			correctAnswerButton = null;
@@ -132,7 +132,7 @@ namespace PopupFlashcards
 		{
 			Hide();
 			ShowInTaskbar = false;
-			MinimizeNotifiy.Visible = true;
+			MinimizeNotifiy.Visible = false;
 			MinimizeNotifiy.ShowBalloonTip(1000);
 			WindowState = FormWindowState.Minimized;
 
@@ -175,12 +175,21 @@ namespace PopupFlashcards
 					genRand = r.Next(0, cards.Count);
 					continue;
 				}
+				else if (correctCards.Contains(cards[genRand]))
+				{
+					genRand = r.Next(0, cards.Count);
+					continue;
+				}
 				else
 				{
-					if (previousCards.Count >= GetLessonCards(settingsWindow.settings.CurrentLesson).Count)
-						previousCards = new List<Card>();
+					if (correctCards.Count >= GetLessonCards(settingsWindow.settings.CurrentLesson).Count)
+						correctCards.Clear();
 
-					previousCards.Add(cards[genRand]);
+					if (previousCards.Count > 5)
+						previousCards.Clear();
+					else
+						previousCards.Add(cards[genRand]);
+
 					cardFound = true;
 				}
 			}
@@ -199,6 +208,7 @@ namespace PopupFlashcards
 			int randAnswerButton = r.Next(0, answerButtons.Count);
 			correctAnswerButton = answerButtons[randAnswerButton];
 			answerButtons[randAnswerButton].Text = cards[genRand].GetAnswer();
+			currentCard = cards[genRand];
 			foreach (Button ab in answerButtons)
 			{
 				if (ab == answerButtons[randAnswerButton])
@@ -207,6 +217,12 @@ namespace PopupFlashcards
 				Card tempCard = cards[r.Next(0, cards.Count)];
 				while (true)
 				{
+					if (freqRand < (float)settingsWindow.settings.Frequency && tempCard.Set != settingsWindow.settings.CurrentLesson)
+					{
+						tempCard = cards[r.Next(0, cards.Count)];
+						continue;
+					}
+
 					if (tempCard.GetAnswer() == cards[genRand].GetAnswer())
 					{
 						tempCard = cards[r.Next(0, cards.Count)];
@@ -243,32 +259,23 @@ namespace PopupFlashcards
 
 		private void AnsBtn_MouseClick(object sender, MouseEventArgs e)
 		{
-			chances--;
-
-			if (cards[genRand].GetAnswerNote() != "")
-				AnswerStatusLbl.Text = "Incorrect, hint: " + cards[genRand].GetAnswerNote() + ", chances left: " + chances;
-			else
-				AnswerStatusLbl.Text = "Incorrect, chances left: " + chances;
-
-			if (sender == correctAnswerButton || chances == 0)
+			if (sender == correctAnswerButton)
 			{
-				if (sender == correctAnswerButton)
-				{
-					AnswerStatusLbl.Text = "Correct!";
-					player.SoundLocation = FileManager.CorrectSoundLocation;
-				}
-				else if (chances == 0)
-				{
-					AnswerStatusLbl.Text = "You'll get it next time!";
-					player.SoundLocation = FileManager.IncorrectSoundLocation;
-					(sender as Button).BackColor = Color.Red;
-				}
-
-				player.Play();
-				correctAnswerButton.BackColor = Color.Green;
-				Enabled = false;
-				ResultTimer.Start();
+				AnswerStatusLbl.Text = "Correct!";
+				player.SoundLocation = FileManager.CorrectSoundLocation;
+				correctCards.Add(currentCard);
 			}
+			else
+			{
+				AnswerStatusLbl.Text = "You'll get it next time!";
+				player.SoundLocation = FileManager.IncorrectSoundLocation;
+				(sender as Button).BackColor = Color.Red;
+			}
+
+			player.Play();
+			correctAnswerButton.BackColor = Color.Green;
+			Enabled = false;
+			ResultTimer.Start();
 		}
 	}
 }
